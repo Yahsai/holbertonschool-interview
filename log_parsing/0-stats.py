@@ -35,39 +35,41 @@ def signal_handler(sig, frame):
     print_stats()
     sys.exit(0)
 
-# Register the signal handler for CTRL + C
-signal.signal(signal.SIGINT, signal_handler)
+# Only execute this part when the script is run directly
+if __name__ == "__main__":
+    # Register the signal handler for CTRL + C
+    signal.signal(signal.SIGINT, signal_handler)
 
-# Read input line by line
-for line in sys.stdin:
-    line = line.strip()
+    # Read input line by line
+    for line in sys.stdin:
+        line = line.strip()
 
-    # Split the line to match the expected format
-    parts = line.split(" ")
-    
-    if len(parts) >= 7:
-        ip, dash, date, request, status_code, file_size = parts[0], parts[1], parts[2], parts[3], parts[-2], parts[-1]
+        # Split the line to match the expected format
+        parts = line.split(" ")
 
-        try:
-            # Convert status code and file size to integers
-            status_code = int(status_code)
-            file_size = int(file_size)
+        if len(parts) >= 7:
+            ip, dash, date, request, status_code, file_size = parts[0], parts[1], parts[2], parts[3], parts[-2], parts[-1]
 
-            # Update total file size
-            total_file_size += file_size
+            try:
+                # Convert status code and file size to integers
+                status_code = int(status_code)
+                file_size = int(file_size)
 
-            # Update the count for valid status codes
-            if status_code in status_codes_count:
-                status_codes_count[status_code] += 1
+                # Update total file size
+                total_file_size += file_size
 
-        except ValueError:
-            # Skip lines with invalid integers
-            continue
+                # Update the count for valid status codes
+                if status_code in status_codes_count:
+                    status_codes_count[status_code] += 1
 
-        # Increment line counter and print stats every 10 lines
-        line_count += 1
-        if line_count % 10 == 0:
-            print_stats()
+            except ValueError:
+                # Skip lines with invalid integers
+                continue
 
-# If there's a termination not caused by CTRL + C, print the stats at the end
-print_stats()
+            # Increment line counter and print stats every 10 lines
+            line_count += 1
+            if line_count % 10 == 0:
+                print_stats()
+
+    # If there's a termination not caused by CTRL + C, print the stats at the end
+    print_stats()
