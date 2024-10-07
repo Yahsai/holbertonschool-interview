@@ -1,4 +1,11 @@
 #!/usr/bin/python3
+"""
+This script reads stdin line by line, processes log entries in a specific format,
+and prints statistics every 10 lines or upon receiving a keyboard interruption.
+The statistics include the total file size and the number of occurrences of
+specific HTTP status codes.
+"""
+
 import sys
 import signal
 
